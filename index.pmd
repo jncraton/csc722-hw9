@@ -12,6 +12,9 @@ $A = \begin{vmatrix}
 −1 & 1 \\
 \end{vmatrix}$
 
+
+https://www.wolframalpha.com/input/?i=svd+%5B%5B2,2%5D,%5B-1,1%5D%5D
+
 Matrix B
 ========
 

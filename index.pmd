@@ -1,3 +1,30 @@
-% Title
-% Author
-% August 5th, 2018
+% CSC722 HW 9
+% Jon Craton
+
+The whole solution is required. Please submit your solution as one pdf file.  
+Calculate SVD of the following matrices.
+
+Matrix A
+========
+
+$A = \begin{vmatrix}
+2 & 2 \\
+−1 & 1 \\
+\end{vmatrix}$
+
+Matrix B
+========
+
+$B = \begin{vmatrix}
+2 & 2 \\
+1 & 1 \\
+\end{vmatrix}$
+
+Matrix C
+========
+
+$C = \begin{vmatrix}
+−1 & 0 \\
+1 & −1 \\
+0 &  1 \\
+\end{vmatrix}$

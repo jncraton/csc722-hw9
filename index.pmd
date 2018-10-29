@@ -13,7 +13,7 @@ $A = \begin{vmatrix}
 \end{vmatrix}$
 
 
-In order to compute the SVD, we need to compute the transpose of $A^T$ and $A^T A$. For the transpose, we simply mirror the matrix about the diagonal:
+In order to compute the SVD, we need to compute the transpose $A^T$ and $A^T A$. For the transpose, we simply mirror the matrix about the diagonal:
 
 $A = \begin{vmatrix}
 2 & 2 \\
@@ -35,22 +35,59 @@ $A^T A = \begin{vmatrix}
 −1 & 1 \\
 \end{vmatrix}$
 
-```python,output='raw'
-from sympy import Matrix
-from sympy import init_printing
-init_printing(use_latex=True)
+```python,results='tex'
+from sympy import Matrix, latex
 
-Matrix([[2,-1],[2,1]]) * Matrix([[2,2],[-1,1]])
+M = Matrix([[2,-1],[2,1]]) * Matrix([[2,2],[-1,1]])
+
+print('$%s$' % latex(M))
 ```
 
-$A^T A = \begin{vmatrix}
-2 & -1 \\
-2 & 1 \\
-\end{vmatrix}\begin{vmatrix}
-2 & 2 \\
-−1 & 1 \\
-\end{vmatrix}$
+Next, we need to calculate the eigenvalues of $A^T A$:
 
+```python
+ev = M.eigenvals()
+print(ev)
+```
+
+We can take the square root of our eigenvalues to get our singular values:
+
+```python
+s = sorted([s**.5 for s in ev.keys()],reverse=True)
+print([i**.5 for i in ev.keys()])
+```
+
+Now we can construct the diagonal matrix S by placing our singular values on the diagonal in descending order:
+
+```python,results='tex'
+S = Matrix([[s[0],0],[0,s[1]]])
+print('$S = %s$' % latex(S))
+```
+
+We also need to compute the inverse of this matrix:
+
+```python,results='tex'
+Sinv = S.inv()
+print('$S^{-1} = %s$' % latex(Sinv))
+```
+
+Now we also need the eigenvectors of $A^T A$:
+
+```python,results='tex'
+evects = sorted(M.eigenvects(),key=lambda v:-v[0])
+print('$%s$' % latex(evects))
+```
+
+We use the eigenvectors, ordered by their eigen values descending, as the columns of matrix $V$.
+
+
+```python,results='tex'
+V = Matrix([[evects[0][2][0],evects[1][2][0]], [evects[0][2][1],evects[1][2][1]]])
+print('$V=%s$' % latex(V))
+```
+
+
+https://fenix.tecnico.ulisboa.pt/downloadFile/3779576344458/singular-value-decomposition-fast-track-tutorial.pdf
 
 https://www.wolframalpha.com/input/?i=svd+%5B%5B2,2%5D,%5B-1,1%5D%5D
 

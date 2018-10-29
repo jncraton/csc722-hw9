@@ -13,6 +13,45 @@ $A = \begin{vmatrix}
 \end{vmatrix}$
 
 
+In order to compute the SVD, we need to compute the transpose of $A^T$ and $A^T A$. For the transpose, we simply mirror the matrix about the diagonal:
+
+$A = \begin{vmatrix}
+2 & 2 \\
+−1 & 1 \\
+\end{vmatrix}$
+
+$A^T = \begin{vmatrix}
+2 & -1 \\
+2 & 1 \\
+\end{vmatrix}$
+
+Now we can multiply by the original matrix to get $A^T A$:
+
+$A^T A = \begin{vmatrix}
+2 & -1 \\
+2 & 1 \\
+\end{vmatrix}\begin{vmatrix}
+2 & 2 \\
+−1 & 1 \\
+\end{vmatrix}$
+
+```python,output='raw'
+from sympy import Matrix
+from sympy import init_printing
+init_printing(use_latex=True)
+
+Matrix([[2,-1],[2,1]]) * Matrix([[2,2],[-1,1]])
+```
+
+$A^T A = \begin{vmatrix}
+2 & -1 \\
+2 & 1 \\
+\end{vmatrix}\begin{vmatrix}
+2 & 2 \\
+−1 & 1 \\
+\end{vmatrix}$
+
+
 https://www.wolframalpha.com/input/?i=svd+%5B%5B2,2%5D,%5B-1,1%5D%5D
 
 Matrix B

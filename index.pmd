@@ -4,6 +4,8 @@
 The whole solution is required. Please submit your solution as one pdf file.  
 Calculate SVD of the following matrices.
 
+https://fenix.tecnico.ulisboa.pt/downloadFile/3779576344458/singular-value-decomposition-fast-track-tutorial.pdf
+
 Matrix A
 ========
 
@@ -36,9 +38,11 @@ $A^T A = \begin{vmatrix}
 \end{vmatrix}$
 
 ```python,results='tex'
-from sympy import Matrix, latex
+from sympy import Matrix, latex, sqrt
 
-M = Matrix([[2,-1],[2,1]]) * Matrix([[2,2],[-1,1]])
+A = Matrix([[2,2],[-1,1]])
+
+M = A.transpose() * A
 
 print('$%s$' % latex(M))
 ```
@@ -52,9 +56,9 @@ print(λ)
 
 We can take the square root of our eigenvalues to get our singular values:
 
-```python
-s = sorted([s**.5 for s in λ.keys()],reverse=True)
-print([i**.5 for i in λ.keys()])
+```python,results='tex'
+s = sorted([sqrt(s) for s in λ.keys()],reverse=True)
+print("$%s$" % latex(s))
 ```
 
 Now we can construct the diagonal matrix Σ by placing our singular values on the diagonal in descending order:
@@ -64,7 +68,7 @@ Now we can construct the diagonal matrix Σ by placing our singular values on th
 print('$Σ = %s$' % latex(Σ))
 ```
 
-We also need to compute the inverse of this matrix:
+We also need to compute the inverse of this matrix for later:
 
 ```python,results='tex'
 print('$Σ^{-1} = %s$' % latex(Σ.inv()))
@@ -94,10 +98,25 @@ V = Matrix([
 print('$V=%s$' % latex(V))
 ```
 
+Now we can compute U as:
 
-https://fenix.tecnico.ulisboa.pt/downloadFile/3779576344458/singular-value-decomposition-fast-track-tutorial.pdf
+$U = AVΣ^{-1}$
 
-https://www.wolframalpha.com/input/?i=svd+%5B%5B2,2%5D,%5B-1,1%5D%5D
+```python,results='tex'
+U = A*V*Σ.inv()
+print('$U=%s$' % latex(U))
+```
+
+Solution
+--------
+
+```python,results='tex'
+print('$V=%s$' % latex(V))
+print('$Σ=%s$' % latex(Σ))
+print('$U=%s$' % latex(U))
+```
+
+This agrees with the solution from [Wolfram Alpha](https://www.wolframalpha.com/input/?i=svd+%5B%5B2,2%5D,%5B-1,1%5D%5D).
 
 Matrix B
 ========

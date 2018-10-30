@@ -6,42 +6,28 @@ Calculate SVD of the following matrices.
 
 https://fenix.tecnico.ulisboa.pt/downloadFile/3779576344458/singular-value-decomposition-fast-track-tutorial.pdf
 
+```python,echo=False
+from sympy import Matrix, latex, sqrt, eye, diag
+```
+
 Matrix A
 ========
 
-$A = \begin{vmatrix}
-2 & 2 \\
-−1 & 1 \\
-\end{vmatrix}$
+```python,echo=False,results='tex'
+A = Matrix([[2,2],[-1,1]])
 
+print('$A=%s$' % latex(A))
+```
 
 In order to compute the SVD, we need to compute the transpose $A^T$ and $A^T A$. For the transpose, we simply mirror the matrix about the diagonal:
 
-$A = \begin{vmatrix}
-2 & 2 \\
-−1 & 1 \\
-\end{vmatrix}$
+```python,echo=False,results='tex'
+print('$A^T=%s$' % latex(A.transpose()))
+```
 
-$A^T = \begin{vmatrix}
-2 & -1 \\
-2 & 1 \\
-\end{vmatrix}$
-
-Now we can multiply by the original matrix to get $A^T A$:
-
-$A^T A = \begin{vmatrix}
-2 & -1 \\
-2 & 1 \\
-\end{vmatrix}\begin{vmatrix}
-2 & 2 \\
-−1 & 1 \\
-\end{vmatrix}$
+Now we can multiply by the original matrix:
 
 ```python,results='tex'
-from sympy import Matrix, latex, sqrt
-
-A = Matrix([[2,2],[-1,1]])
-
 M = A.transpose() * A
 
 print('$%s$' % latex(M))
@@ -64,7 +50,7 @@ print("$%s$" % latex(s))
 Now we can construct the diagonal matrix Σ by placing our singular values on the diagonal in descending order:
 
 ```python,results='tex'
-Σ = Matrix([[s[0],0],[0,s[1]]])
+Σ = diag(*s)
 print('$Σ = %s$' % latex(Σ))
 ```
 
@@ -88,13 +74,14 @@ v = [i[2][0] / i[2][0].norm() for i in v]
 print('$%s$' % latex(v))
 ``` 
 
-We use the eigenvectors, ordered by their eigen values descending, as the columns of matrix $V$.
+We use the eigenvectors, ordered by their eigenvalues descending, as the columns of matrix $V$.
 
 ```python,results='tex'
-V = Matrix([
-  [v[0][0],v[1][0]],
-  [v[0][1],v[1][1]],
-])
+V = Matrix()
+
+for i in v:
+  V = V.col_insert(1, Matrix(i))
+
 print('$V=%s$' % latex(V))
 ```
 
@@ -110,7 +97,11 @@ print('$U=%s$' % latex(U))
 Solution
 --------
 
-```python,results='tex'
+$M = UΣV^T$
+
+where:
+
+```python,echo=False,results='tex'
 print('$V=%s$' % latex(V))
 print('$Σ=%s$' % latex(Σ))
 print('$U=%s$' % latex(U))

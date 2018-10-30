@@ -46,43 +46,51 @@ print('$%s$' % latex(M))
 Next, we need to calculate the eigenvalues of $A^T A$:
 
 ```python
-ev = M.eigenvals()
-print(ev)
+λ = M.eigenvals()
+print(λ)
 ```
 
 We can take the square root of our eigenvalues to get our singular values:
 
 ```python
-s = sorted([s**.5 for s in ev.keys()],reverse=True)
-print([i**.5 for i in ev.keys()])
+s = sorted([s**.5 for s in λ.keys()],reverse=True)
+print([i**.5 for i in λ.keys()])
 ```
 
-Now we can construct the diagonal matrix S by placing our singular values on the diagonal in descending order:
+Now we can construct the diagonal matrix Σ by placing our singular values on the diagonal in descending order:
 
 ```python,results='tex'
-S = Matrix([[s[0],0],[0,s[1]]])
-print('$S = %s$' % latex(S))
+Σ = Matrix([[s[0],0],[0,s[1]]])
+print('$Σ = %s$' % latex(Σ))
 ```
 
 We also need to compute the inverse of this matrix:
 
 ```python,results='tex'
-Sinv = S.inv()
-print('$S^{-1} = %s$' % latex(Sinv))
+print('$Σ^{-1} = %s$' % latex(Σ.inv()))
 ```
 
 Now we also need the eigenvectors of $A^T A$:
 
 ```python,results='tex'
-evects = sorted(M.eigenvects(),key=lambda v:-v[0])
-print('$%s$' % latex(evects))
-```
+v = sorted(M.eigenvects(),key=lambda i:-i[0])
+print('$%s$' % latex(v))
+``` 
+
+We need to normalize these vectors to be unit length:
+
+```python,results='tex'
+v = [i[2][0] / i[2][0].norm() for i in v]
+print('$%s$' % latex(v))
+``` 
 
 We use the eigenvectors, ordered by their eigen values descending, as the columns of matrix $V$.
 
-
 ```python,results='tex'
-V = Matrix([[evects[0][2][0],evects[1][2][0]], [evects[0][2][1],evects[1][2][1]]])
+V = Matrix([
+  [v[0][0],v[1][0]],
+  [v[0][1],v[1][1]],
+])
 print('$V=%s$' % latex(V))
 ```
 

@@ -129,10 +129,10 @@ Now we can multiply by the original matrix:
 ```python,results='tex'
 M = A.transpose() * A
 
-print('$%s$' % latex(M))
+print('$A^TA=%s$' % latex(M))
 ```
 
-Next, we need to calculate the eigenvalues of $A^T A$:
+Next, we need to calculate the eigenvalues of $A^TA$:
 
 ```python
 λ = M.eigenvals()
@@ -178,16 +178,36 @@ for i in v:
 print('$V=%s$' % latex(V))
 ```
 
-Now we can compute U as:
-
-$U = AVΣ^{-1}$
-
-Because Σ here is a singular matrix, we simply divide by it's only value:
+Now we can compute U in the same way from $AA^T$:
 
 ```python,results='tex'
-U = A*V*Matrix([[sqrt(10),0],[0,sqrt(10)]])/10
-print('$A=%s$' % latex(A))
-print('$V=%s$' % latex(V))
+M = A * A.transpose()
+
+print('$AA^T=%s$' % latex(M))
+```
+
+Let's calculate the eigenvectors:
+
+```python,results='tex'
+v = sorted((A * A.transpose()).eigenvects(),key=lambda i:-i[0])
+print('$%s$' % latex(v))
+``` 
+
+We need to normalize these vectors to be unit length:
+
+```python,results='tex'
+v = [i[2][0] / i[2][0].norm() for i in v]
+print('$%s$' % latex(v))
+``` 
+
+We use the eigenvectors, ordered by their eigenvalues descending, as the columns of matrix $V$.
+
+```python,results='tex'
+U = Matrix()
+
+for i in v:
+  U = U.col_insert(1, Matrix(i))
+
 print('$U=%s$' % latex(U))
 ```
 

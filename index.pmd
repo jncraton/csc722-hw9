@@ -229,8 +229,125 @@ This agrees with the solution from [Wolfram Alpha](https://www.wolframalpha.com/
 Matrix C
 ========
 
-$C = \begin{vmatrix}
-−1 & 0 \\
-1 & −1 \\
-0 &  1 \\
-\end{vmatrix}$
+```python,echo=False,results='tex'
+A = Matrix([[-1,0],[1,-1],[0,1]])
+
+print('$A=%s$' % latex(A))
+```
+
+In order to compute the SVD, we need to compute the transpose $A^T$ and $A^T A$. For the transpose, we simply mirror the matrix about the diagonal:
+
+```python,echo=False,results='tex'
+print('$A^T=%s$' % latex(A.transpose()))
+```
+
+Now we can multiply by the original matrix:
+
+```python,results='tex'
+M = A.transpose() * A
+
+print('$A^TA=%s$' % latex(M))
+```
+
+Next, we need to calculate the eigenvalues of $A^TA$:
+
+```python
+λ = M.eigenvals()
+print(λ)
+```
+
+We can take the square root of our eigenvalues to get our singular values:
+
+```python,results='tex'
+s = sorted([sqrt(s) for s in λ.keys()],reverse=True)
+print("$%s$" % latex(s))
+```
+
+Now we can construct the diagonal matrix Σ by placing our singular values on the diagonal in descending order:
+
+```python,results='tex'
+Σ = diag(*s)
+print('$Σ = %s$' % latex(Σ))
+```
+
+We need to augment this to be the correct shape:
+
+```python,results='tex'
+Σ = Σ.col_join(Matrix([[0,0]]))
+print('$Σ = %s$' % latex(Σ))
+```
+
+Now we also need the eigenvectors of $A^T A$:
+
+```python,results='tex'
+v = sorted(M.eigenvects(),key=lambda i:-i[0])
+print('$%s$' % latex(v))
+``` 
+
+We need to normalize these vectors to be unit length:
+
+```python,results='tex'
+v = [i[2][0] / i[2][0].norm() for i in v]
+print('$%s$' % latex(v))
+``` 
+
+We use the eigenvectors, ordered by their eigenvalues descending, as the columns of matrix $V$.
+
+```python,results='tex'
+V = Matrix()
+
+for c,i in enumerate(v):
+  V = V.col_insert(c+1, Matrix(i))
+
+print('$V=%s$' % latex(V))
+```
+
+Now we can compute U in the same way from $AA^T$:
+
+```python,results='tex'
+M = A * A.transpose()
+
+print('$AA^T=%s$' % latex(M))
+```
+
+Let's calculate the eigenvectors:
+
+```python,results='tex'
+v = sorted((A * A.transpose()).eigenvects(),key=lambda i:-i[0])
+print('$%s$' % latex(v))
+``` 
+
+We need to normalize these vectors to be unit length:
+
+```python,results='tex'
+v = [i[2][0] / i[2][0].norm() for i in v]
+print('$%s$' % latex(v))
+``` 
+
+We use the eigenvectors, ordered by their eigenvalues descending, as the columns of matrix $V$.
+
+```python,results='tex'
+U = Matrix()
+
+for c,i in enumerate(v):
+  U = U.col_insert(c+1, Matrix(i))
+
+print('$U=%s$' % latex(U))
+```
+
+Solution
+--------
+
+$M = UΣV^T$
+
+where:
+
+```python,echo=False,results='tex'
+print('$V=%s$' % latex(V))
+print('$Σ=%s$' % latex(Σ))
+print('$U=%s$' % latex(U))
+```
+
+This agrees with the solution from [Wolfram Alpha](https://www.wolframalpha.com/input/?i=svd+%5B%5B-1,0%5D,%5B1,-1%5D,%5B0,1%5D%5D).
+
+

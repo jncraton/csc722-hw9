@@ -4,8 +4,6 @@
 The whole solution is required. Please submit your solution as one pdf file.  
 Calculate SVD of the following matrices.
 
-https://fenix.tecnico.ulisboa.pt/downloadFile/3779576344458/singular-value-decomposition-fast-track-tutorial.pdf
-
 ```python,echo=False
 from sympy import Matrix, latex, sqrt, eye, diag
 ```
